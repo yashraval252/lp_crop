@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -24,7 +25,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        
+        $users = User::all();
+        return view('create', compact('users'));
     }
 
     /**
@@ -39,9 +41,13 @@ class UserController extends Controller
         $data = substr($base64_image, strpos($base64_image, ',') + 1);
         $image = base64_decode($data);
         $image_name = date('mdYHis') . uniqid().'.png' ;
+        $store = Storage::disk('public')->put($image_name, $image);
         $url = Storage::url($image_name);
-        $store = Storage::put($image_name, $image);
-       
+        User::create(['name' => $request->name,
+                       'email' => $request->email,
+                      'image' => $url 
+                    ]); 
+             return redirect()->route('create');           
     }
 
     /**

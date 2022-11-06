@@ -4,7 +4,6 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta id="csrf" value="{{ csrf_token() }}">
     <title>
         jQuery FineCrop Plugin Example
     </title>
@@ -31,14 +30,25 @@
         <div class="row">
             <div class="col-lg-8 col-md-7 col-sm-6">
                 @csrf
-                <input type="hidden" id="token" name="_token" value="{{ csrf_token() }}" />
-                <input type="file" id="upphoto" style="display:none;">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-text">
+                            Name
+                            <input type="text" name="name" id="name" />
+                        </div>
+                        <div class="card-text">
+                            Email
+                            <input type="text" name="email" id="email" />
+                        </div>
 
-                <label for="upphoto">
-                    <div class="inputLabel">
-                        click here to upload an image
-                    </div>
-                </label>
+                        <input type="hidden" id="token" name="_token" value="{{ csrf_token() }}" />
+                        <input type="file" id="upphoto" style="display:none;">
+
+                        <label for="upphoto">
+                            <div class="inputLabel">
+                                click here to upload an image
+                            </div>
+                        </label>
 
             </div>
         </div>
@@ -48,7 +58,13 @@
             </div>
         </div>
     </div>
-   <div><button class='btn btn-warning' id='buttonid'>Button</button></div>
+   <div>
+    </div>
+                    </div>
+                </div>
+                <a class='btn btn-warning' id='buttonid'>Button</a>
+
+               
 
 <!--
     Div structure : Manitan a container which has class "cropHolder"
@@ -113,12 +129,14 @@
                //console.log(base);
 
                let token = $('#token').val();
+               let name = $('#name').val();
+               let email = $('#email').val();
                      $.ajax({
                         url : '{{ route('store') }}',
                         type : 'post',
-                        data : { _token : token , image : base},
+                        data : { name : name, email : email, _token : token , image : base},
                         success : function(data){
-                            console.log(data);
+                            window.location.href = "{{ route('create') }}";
                         }
                      });
         });
